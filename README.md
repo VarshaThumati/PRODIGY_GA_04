@@ -96,3 +96,59 @@ Each dataset image contains two sections:
 │                     │                     │
 └─────────────────────┴─────────────────────┘
 ```
+---
+## Project Flow
+
+                 ┌──────────────────────┐
+                 │    Facades Dataset   │
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │  Load Paired Images  │
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │ Split Input & Target │
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │ Image Preprocessing  │
+                 │ Resize / Crop / Flip │
+                 │ Normalize [-1, 1]    │
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │     U-Net     │
+                    │    Generator  │
+                    └───────┬───────┘
+                            │
+                            ▼
+                    Generated Image
+                            │
+                 ┌──────────┴──────────┐
+                 │                     │
+                 ▼                     ▼
+          Real Image Pair       Generated Pair
+                 │                     │
+                 └──────────┬──────────┘
+                            ▼
+                    ┌───────────────┐
+                    │    PatchGAN   │
+                    │ Discriminator  │
+                    └───────┬───────┘
+                            │
+                            ▼
+                     Loss Calculation
+                            │
+                            ▼
+                    Model Weight Update
+                            │
+                            ▼
+                   Trained Generator
+                            │
+                            ▼
+                    Generated Facade
